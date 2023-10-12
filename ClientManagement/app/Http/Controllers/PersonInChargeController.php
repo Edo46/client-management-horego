@@ -9,9 +9,6 @@ use Yajra\DataTables\DataTables;
 class PersonInChargeController extends Controller
 {
     public function index(){
-        if (\Auth::user()->restriction->person === 0){
-            return view('layouts.404');
-        }
         return view('dashboard.manage-pic');
     }
 

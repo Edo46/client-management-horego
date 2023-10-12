@@ -16,8 +16,6 @@ class ManageUserController extends Controller
     protected function validateUser(Request $request, $id = null) {
         $rules = [
             'name' => 'required',
-            'person' => 'required',
-            'organisation' => 'required',
             'email' => 'required|unique:users,email' . ($id ? ',' . $id : ''),
         ];
 
@@ -39,14 +37,8 @@ class ManageUserController extends Controller
             $data->email = $request->email;
             $data->password = bcrypt('password123');
             $data->roles = 'account_manager';
-            $data->save();
 
-            $restriction = new RestrictionAccess();
-            $restriction->user_id = $data->id;
-            $restriction->person = $request->person;
-            $restriction->organisation = $request->organisation;
-
-            if ($restriction->save()) {
+            if ($data->save()) {
                 return json_encode(['success' => 'User saved successfully']);
             } else {
                 return json_encode(['error' => 'Error while saving User Data']);
@@ -67,11 +59,7 @@ class ManageUserController extends Controller
             $data->password = bcrypt('password123');
             $data->roles = 'account_manager';
 
-            $restriction = RestrictionAccess::where('user_id', $id)->first();
-            $restriction->person = $request->person;
-            $restriction->organisation = $request->organisation;
-
-            if ($data->update() && $restriction->update()) {
+            if ($data->update()) {
                 return json_encode(['success' => 'User updated successfully']);
             } else {
                 return json_encode(['error' => 'Error while updating User Data']);
@@ -84,11 +72,12 @@ class ManageUserController extends Controller
 
 
     public function ajaxTable(){
-        $data = User::where('roles', '!=', 'super_admin')->with('restriction');
+        $data = User::where('roles', '!=', 'super_admin');
         return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('action', function($data){
                 return "
+                    <a href=\"#\" class=\"btn btn-outline-info btn-sm legitRipple\" id=\"assigned\" style=\"padding-bottom: 1px;\"><i class=\"fe-unlock\"></i> Permission</a>
                     <a href=\"#\" class=\"btn btn-outline-success btn-sm legitRipple\" id=\"edit\" style=\"padding-bottom: 1px;\"><i class=\"fe-edit\"></i> Edit</a>
                     <a href=\"#\" class=\"btn btn-outline-danger btn-sm legitRipple\" id=\"delete\" style=\"padding-bottom: 1px;\"><i class=\"fe-trash\"></i> Delete</a>
                 ";

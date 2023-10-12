@@ -10,13 +10,6 @@
     </li>
 
     <li class="menu-title mt-2">Apps Master</li>
-
-    <li>
-        <a href="{{ url('manage-pic') }}" id="manage-pic">
-            <i data-feather="user"></i>
-            <span> Manage PIC </span>
-        </a>
-    </li>
     <li>
         <a href="{{ url('manage-organisation') }}" id="manage-organisation">
             <i data-feather="home"></i>
@@ -25,7 +18,14 @@
     </li>
 
     @if(\Auth::user()->roles === 'super_admin')
-        <li class="menu-title mt-2">Credential Setup</li>
+        <li class="menu-title mt-2">Super Admin Area</li>
+
+        <li>
+            <a href="{{ url('manage-pic') }}" id="manage-pic">
+                <i data-feather="user"></i>
+                <span> Manage PIC </span>
+            </a>
+        </li>
 
         <li>
             <a href="{{ url('manage-user') }}" id="manage-user">

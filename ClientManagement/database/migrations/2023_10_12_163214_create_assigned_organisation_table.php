@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('restriction_access', function (Blueprint $table) {
+        Schema::create('assigned_organisation', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->nullable()->references("id")->on("users")->cascadeOnDelete();
-            $table->boolean('person')->default(0);
-            $table->boolean('organisation')->default(0);
+            $table->foreignId("user_id")->references("id")->on("users")->cascadeOnDelete();
+            $table->foreignId("organisation_id")->references("id")->on("organisation")->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('restriction_access');
+        Schema::dropIfExists('assigned_organisation');
     }
 };

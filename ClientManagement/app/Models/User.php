@@ -51,9 +51,4 @@ class User extends Authenticatable
         }
         return false;
     }
-
-    public function restriction()
-    {
-        return $this->hasOne(RestrictionAccess::class, 'user_id', 'id');
-    }
 }

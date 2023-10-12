@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssignedOrganisation;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -9,9 +10,6 @@ use Yajra\DataTables\DataTables;
 class OrganisationController extends Controller
 {
     public function index(){
-        if (\Auth::user()->restriction->organisation === 0){
-            return view('layouts.404');
-        }
         return view('dashboard.manage-organisation');
     }
 
@@ -88,15 +86,27 @@ class OrganisationController extends Controller
 
 
     public function ajaxTable(){
+        $userOrganisations = AssignedOrganisation::where('user_id', \Auth::user()->id)->pluck('organisation_id')->toArray();
         $data = Organisation::all();
         return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('action', function($data){
-                return "
-                    <a href=\"#\" class=\"btn btn-outline-info btn-sm legitRipple\" id=\"details\" style=\"padding-bottom: 1px;\"><i class=\"fe-eye\"></i> Details</a>
-                    <a href=\"#\" class=\"btn btn-outline-success btn-sm legitRipple\" id=\"edit\" style=\"padding-bottom: 1px;\"><i class=\"fe-edit\"></i> Edit</a>
-                    <a href=\"#\" class=\"btn btn-outline-danger btn-sm legitRipple\" id=\"delete\" style=\"padding-bottom: 1px;\"><i class=\"fe-trash\"></i> Delete</a>
-                ";
+            ->addColumn('action', function ($data) use ($userOrganisations) {
+                $buttons = '';
+
+                // Check if the organisation_id exists in the user's assigned organizations
+                if (\Auth::user()->roles === 'super_admin'){
+                    $buttons .= '<a href="#" class="btn btn-outline-info btn-sm legitRipple" id="details" style="padding-bottom: 1px;"><i class="fe-eye"></i> Details</a>';
+                    $buttons .= '<a href="#" class="btn btn-outline-success btn-sm legitRipple" id="edit" style="padding-bottom: 1px;"><i class="fe-edit"></i> Edit</a>';
+                    $buttons .= '<a href="#" class="btn btn-outline-danger btn-sm legitRipple" id="delete" style="padding-bottom: 1px;"><i class="fe-trash"></i> Delete</a>';
+                } else if (in_array($data->id, $userOrganisations)) {
+                    $buttons .= '<a href="#" class="btn btn-outline-info btn-sm legitRipple" id="details" style="padding-bottom: 1px;"><i class="fe-eye"></i> Details</a>';
+                    $buttons .= '<a href="#" class="btn btn-outline-success btn-sm legitRipple" id="edit" style="padding-bottom: 1px;"><i class="fe-edit"></i> Edit</a>';
+                    $buttons .= '<a href="#" class="btn btn-outline-danger btn-sm legitRipple" id="delete" style="padding-bottom: 1px;"><i class="fe-trash"></i> Delete</a>';
+                } else {
+                    $buttons .= '<a href="#" class="btn btn-outline-info btn-sm legitRipple" id="details" style="padding-bottom: 1px;"><i class="fe-eye"></i> Details</a>';
+                }
+
+                return $buttons;
             })
             ->addColumn('logo_organisation', function ($data){
                 $url= asset('logo/'.$data->logo);
@@ -112,5 +122,10 @@ class OrganisationController extends Controller
         }else{
             return json_encode(array("error"=>"Failed when deleting Organisation"));
         }
+    }
+
+    public function list(){
+        $data = Organisation::all();
+        return response()->json($data);
     }
 }

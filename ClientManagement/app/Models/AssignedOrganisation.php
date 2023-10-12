@@ -5,13 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RestrictionAccess extends Model
+class AssignedOrganisation extends Model
 {
     use HasFactory;
-    protected $table = 'restriction_access';
+    protected $table = 'assigned_organisation';
     protected $primaryKey = 'id';
     public $timestamps = true;
     protected $fillable = [
-        'person', 'organisation',
+        'user_id', 'organisation_id'
     ];
+
+    public function organisation()
+    {
+        return $this->hasOne(Organisation::class, 'id', 'organisation_id');
+    }
 }
