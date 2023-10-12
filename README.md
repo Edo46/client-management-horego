@@ -11,6 +11,8 @@ Please Follow this instruction to setup the project
 Install with Composer
 
 ```bash
+  cd ClientManagement
+  
   composer install
 ```
 
