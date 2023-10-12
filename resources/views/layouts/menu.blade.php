@@ -24,12 +24,14 @@
         </a>
     </li>
 
-    <li class="menu-title mt-2">Credential Setup</li>
+    @if(\Auth::user()->roles === 'super_admin')
+        <li class="menu-title mt-2">Credential Setup</li>
 
-    <li>
-        <a href="{{ url('manage-user') }}" id="manage-user">
-            <i data-feather="users"></i>
-            <span> Manage Users </span>
-        </a>
-    </li>
+        <li>
+            <a href="{{ url('manage-user') }}" id="manage-user">
+                <i data-feather="users"></i>
+                <span> Manage Users </span>
+            </a>
+        </li>
+    @endif
 @endsection

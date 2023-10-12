@@ -9,6 +9,9 @@ use Yajra\DataTables\DataTables;
 class OrganisationController extends Controller
 {
     public function index(){
+        if (\Auth::user()->restriction->organisation === 0){
+            return view('layouts.404');
+        }
         return view('dashboard.manage-organisation');
     }
 

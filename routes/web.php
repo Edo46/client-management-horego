@@ -50,7 +50,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/edit/{id}', [OrganisationController::class, 'edit']);
         Route::post('/delete/{id}', [OrganisationController::class, 'delete']);
     });
+});
 
+Route::group(['middleware' => ['role:super_admin', 'auth']], function () {
     Route::group(['prefix' => 'manage-user'], function () {
         Route::get('/', [ManageUserController::class, 'index']);
         Route::get('/data', [ManageUserController::class, 'ajaxTable']);
