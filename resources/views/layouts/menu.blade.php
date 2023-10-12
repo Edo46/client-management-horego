@@ -23,4 +23,13 @@
             <span> Manage Organisation </span>
         </a>
     </li>
+
+    <li class="menu-title mt-2">Credential Setup</li>
+
+    <li>
+        <a href="{{ url('manage-user') }}" id="manage-user">
+            <i data-feather="users"></i>
+            <span> Manage Users </span>
+        </a>
+    </li>
 @endsection

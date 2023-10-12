@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('restriction_access', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->enum('roles', ['super_admin', 'account_manager']);
-            $table->string('password');
-            $table->rememberToken();
+            $table->foreignId("user_id")->nullable()->references("id")->on("users")->cascadeOnDelete();
+            $table->boolean('person')->default(0);
+            $table->boolean('organisation')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('restriction_access');
     }
 };

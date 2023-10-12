@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PersonInChargeController;
 use App\Http\Controllers\OrganisationController;
+use App\Http\Controllers\ManageUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/input', [OrganisationController::class, 'input']);
         Route::post('/edit/{id}', [OrganisationController::class, 'edit']);
         Route::post('/delete/{id}', [OrganisationController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'manage-user'], function () {
+        Route::get('/', [ManageUserController::class, 'index']);
+        Route::get('/data', [ManageUserController::class, 'ajaxTable']);
+        Route::post('/input', [ManageUserController::class, 'input']);
+        Route::post('/edit/{id}', [ManageUserController::class, 'edit']);
+        Route::post('/delete/{id}', [ManageUserController::class, 'delete']);
     });
 });
 

@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'roles'
     ];
 
     /**
@@ -42,4 +43,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function hasRole($role)
+    {
+        if ($role == $this->roles) {
+            return true;
+        }
+        return false;
+    }
+
+    public function restriction()
+    {
+        return $this->hasOne(RestrictionAccess::class, 'user_id', 'id');
+    }
 }

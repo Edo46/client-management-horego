@@ -20,6 +20,7 @@ class UserSeed extends Seeder
                     'name' => 'Admin',
                     'email' => 'admin@mail.com',
                     'email_verified_at' => date('Y-m-d H:i:s'),
+                    'roles' => 'super_admin',
                     'password' => bcrypt('password123'),
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
