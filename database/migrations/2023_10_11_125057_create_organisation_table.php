@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('website');
             $table->string('logo');
+            $table->json('pic');
             $table->timestamps();
         });
     }
