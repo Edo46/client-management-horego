@@ -48,3 +48,8 @@ Start the local development server
 
 Email : admin@mail.com
 Passw : password123
+
+
+## BIG Notes
+
+The Default Password is (password123) if you create a new user from "Manage User" Page
